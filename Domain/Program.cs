@@ -1,4 +1,5 @@
 using Domain.Repositories;
+using Domain.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -13,8 +14,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddTransient<IUserRepository, UserEloquentRepository>();
+builder.Services.AddSingleton<JwtTokenService, JwtTokenService>();
 
-string secret = "fedaf7d8863b48e197b9287d492b708e";
+
+string secret = builder.Configuration["JwtSecretKey"];
 var key = Encoding.ASCII.GetBytes(secret);
 builder.Services.AddAuthentication(opt =>
 {

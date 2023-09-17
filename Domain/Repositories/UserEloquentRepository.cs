@@ -13,4 +13,26 @@ public class UserEloquentRepository : IUserRepository
 
         return users;
     }
+
+    public User FindById(int id)
+    {
+        if (id != 1)
+        {
+            throw new ArgumentException("Usuário não existe no sistema");
+        }
+
+        return new User(1, "Nome1", "email@email.com", "batman");
+
+    }
+
+    public User FindByEmail(string email)
+    {
+        if (email != "email@email.com")
+        {
+            throw new ArgumentException("Usuário não existe no sistema");
+        }
+
+        return new User(1, "Nome1", "email@email.com", "batman");
+
+    }
 }

@@ -8,17 +8,22 @@ namespace Domain.Services;
 
 public class JwtTokenService
 {
+    private string _secret;
+    public JwtTokenService(IConfiguration configuration)
+    {
+        _secret = configuration["JwtSecretKey"];
+    }
+
     public string Generate(User user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
-        string secret = "fedaf7d8863b48e197b9287d492b708e";
-        var key = Encoding.ASCII.GetBytes(secret);
+        var key = Encoding.ASCII.GetBytes(_secret);
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(new[] {
                 new Claim(ClaimTypes.Name, user.Name),
-                new Claim("Teste", "testando")
+                new Claim("Email", user.Email)
             }),
             Expires = DateTime.UtcNow.AddHours(8),
             SigningCredentials = new SigningCredentials(

@@ -5,6 +5,8 @@ namespace Domain.Repositories;
 
 public interface IUserRepository
 {
-
     public IList<User> FindAll();
+    public User FindById(int id);
+    public User FindByEmail(string email);
+
 }
