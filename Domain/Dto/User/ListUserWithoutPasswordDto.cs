@@ -1,4 +1,6 @@
-﻿namespace Domain.Dto.User;
+﻿using Domain.Model;
+
+namespace Domain.Dto.User;
 
 public record ListUserWithoutPasswordDto
 {
@@ -10,5 +12,11 @@ public record ListUserWithoutPasswordDto
     {
         Name = dto.Name;
         Email = dto.Email;
+    }
+
+    public ListUserWithoutPasswordDto(Model.User user)
+    {
+        Name = user.Name;
+        Email = user.Email;
     }
 }
