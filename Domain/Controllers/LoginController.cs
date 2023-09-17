@@ -23,7 +23,7 @@ public class LoginController : ControllerBase
         try
         {
             User user = _userRepository.FindByEmail(dto.Email);
-            return Ok(new { message = jwtToken.Generate(user) });
+            return Ok(new { token = jwtToken.Generate(user) });
         }
         catch (ArgumentException ex)
         {
