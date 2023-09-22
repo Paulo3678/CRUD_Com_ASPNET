@@ -48,13 +48,19 @@ public class UserController : ControllerBase
                 return Unauthorized(new { message = "Você não pode acessar as informações de outro usuário." });
             }
 
-
             return Ok(new ListUserWithoutPasswordDto(user));
         }
         catch (ArgumentException ex)
         {
             return BadRequest(new { message = ex.Message });
         }
+    }
+
+    [Authorize]
+    [HttpPatch]
+    public IActionResult UpdatePassword()
+    {
+        return Ok();
     }
 
 }
