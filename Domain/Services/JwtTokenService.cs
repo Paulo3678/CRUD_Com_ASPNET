@@ -23,7 +23,8 @@ public class JwtTokenService
         {
             Subject = new ClaimsIdentity(new[] {
                 new Claim(ClaimTypes.Name, user.Name),
-                new Claim("Email", user.Email)
+                new Claim("Email", user.Email),
+                new Claim(ClaimTypes.Role, user.Roles.ToString())
             }),
             Expires = DateTime.UtcNow.AddHours(8),
             SigningCredentials = new SigningCredentials(

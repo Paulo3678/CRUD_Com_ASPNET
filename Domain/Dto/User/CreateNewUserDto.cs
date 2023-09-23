@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Domain.Model;
+using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Dto.User;
 
@@ -16,4 +17,7 @@ public record CreateNewUserDto
     [Required(ErrorMessage = "É preciso confirmar a senha!")]
     [Compare("Password", ErrorMessage = "As senhas não são iguais")]
     public string ConfirmPassword { get; set; }
+    [Required(ErrorMessage = "É preciso informar a permissão do usuário para continuar!")]
+    [EnumDataType(typeof(UserRolesEnum), ErrorMessage = "O campo role só recebe os valores ADMIN(1) ou NORMAL(2)")]
+    public UserRolesEnum Role { get; set; }
 }

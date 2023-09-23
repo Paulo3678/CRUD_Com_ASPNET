@@ -25,6 +25,7 @@ public class UserController : ControllerBase
 
     [HttpPost]
     [Route("create")]
+    [Authorize(Roles = "ADMIN")]
     public IActionResult Create(CreateNewUserDto dto)
     {
         try

@@ -22,5 +22,10 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
          .HasColumnType("text")
          .IsRequired();
 
+        builder.Property(u => u.Roles)
+            .HasDefaultValue("NORMAL")
+            .HasDefaultValueSql("VARCHAR(20)")
+            .IsRequired();
+
     }
 }

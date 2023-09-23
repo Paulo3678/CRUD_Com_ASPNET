@@ -18,8 +18,8 @@ public class UserEloquentRepository : IUserRepository
     public IList<User> FindAll()
     {
         List<User> users = new List<User>();
-        users.Add(new User("Nome1", "email@email.com", "batman"));
-        users.Add(new User("Nome2", "teste@email.com", "robin"));
+        //users.Add(new User("Nome1", "email@email.com", "batman"));
+        //users.Add(new User("Nome2", "teste@email.com", "robin"));
 
         return users;
     }
@@ -49,16 +49,17 @@ public class UserEloquentRepository : IUserRepository
         {
             throw new ArgumentException("E-mail já cadastrado no nosso sistema.");
         }
-
         User user = new User(
             dto.Name,
             dto.Email,
-            _passwordHasher.HashPassword(null, dto.Password)
+            _passwordHasher.HashPassword(null, dto.Password),
+            dto.Role
         );
 
         _context.Users.Add(user);
         _context.SaveChanges();
         return new ListUserWithoutPasswordDto(dto);
+
     }
     public void UpdateUserPassword(UpdatePasswordDto dto, User userToUpdate)
     {
