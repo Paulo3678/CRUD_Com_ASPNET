@@ -2,9 +2,11 @@
 using Domain.Model;
 using Domain.Repositories;
 using Domain.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
 using System.Security.Claims;
 
 namespace Domain.Controllers;
@@ -79,7 +81,6 @@ public class UserController : ControllerBase
             }
 
             _repository.UpdateUserPassword(dto, user);
-
             return Ok(new { message = "Senha atualizada com sucesso." });
         }
         catch (Exception ex)
@@ -88,4 +89,30 @@ public class UserController : ControllerBase
         }
     }
 
+    [Authorize]
+    [HttpPut]
+    public IActionResult UpdateUserInfo([FromBody] UpdateUserInfoDto dto)
+    {
+        try
+        {
+            var existAnUserWithNewEmail = _repository.FindByEmail(dto.Email);
+            return BadRequest(new { message = "O e-mail informado já é utilizado por outro usuário no sistema." });
+        }
+        catch (Exception ex)
+        {
+            try
+            {
+                var actualEmail = HttpContext.User.FindFirst("Email");
+                _repository.UpdateUserInfos(dto, actualEmail.Value);
+
+                return Ok(new { message = "Dados atualizados com sucesso. Gere um novo token para continuar as suas consultas." });
+            }
+            catch (Exception ec)
+            {
+                return BadRequest(new { message = ec.Message });
+            }
+
+        }
+
+    }
 }

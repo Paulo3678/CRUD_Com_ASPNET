@@ -32,7 +32,6 @@ public class UserEloquentRepository : IUserRepository
         }
         return user;
     }
-
     public User FindByEmail(string email)
     {
         var user = _context.Users.FirstOrDefault(x => x.Email == email);
@@ -42,7 +41,6 @@ public class UserEloquentRepository : IUserRepository
         }
         return user;
     }
-
     public ListUserWithoutPasswordDto Create(CreateNewUserDto dto)
     {
         var userEmailAlreadyExists = _context.Users.FirstOrDefault(u => u.Email == dto.Email);
@@ -62,7 +60,6 @@ public class UserEloquentRepository : IUserRepository
         _context.SaveChanges();
         return new ListUserWithoutPasswordDto(dto);
     }
-
     public void UpdateUserPassword(UpdatePasswordDto dto, User userToUpdate)
     {
         try
@@ -75,6 +72,25 @@ public class UserEloquentRepository : IUserRepository
         {
             throw new Exception("Erro ao tentar atualizar senha. Tente novamente mais tarde");
         }
-
     }
+    public void UpdateUserInfos(UpdateUserInfoDto dto, string userEmail)
+    {
+        try
+        {
+            var user = _context.Users.FirstOrDefault(u => u.Email == userEmail);
+            if (user == null)
+            {
+                throw new Exception("Usuário não encontrado no sistema");
+            }
+            user.Name = dto.Name;
+            user.Email = dto.Email;
+
+            _context.SaveChanges();
+        }
+        catch (Exception)
+        {
+            throw new Exception("Erro ao tentar atualizar dados do usuário");
+        }
+    }
+
 }

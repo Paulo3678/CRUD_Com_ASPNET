@@ -30,11 +30,9 @@ public class JwtTokenService
                 new SymmetricSecurityKey(key),
                 SecurityAlgorithms.HmacSha256
             ),
-
         };
 
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
     }
-
 }

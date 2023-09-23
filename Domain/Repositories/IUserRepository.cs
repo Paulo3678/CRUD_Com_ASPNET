@@ -11,4 +11,5 @@ public interface IUserRepository
     public User FindByEmail(string email);
     public ListUserWithoutPasswordDto Create(CreateNewUserDto dto);
     public void UpdateUserPassword(UpdatePasswordDto dto, User userToUpdate);
+    public void UpdateUserInfos(UpdateUserInfoDto dto, string userEmail);
 }
