@@ -15,13 +15,28 @@ public class UserEloquentRepository : IUserRepository
         _passwordHasher = new PasswordHasher<User>();
     }
 
-    public IList<User> FindAll()
+    public IList<ListUserWithoutPasswordDto> FindAll(bool paginated = false, int page = 0)
     {
-        List<User> users = new List<User>();
-        //users.Add(new User("Nome1", "email@email.com", "batman"));
-        //users.Add(new User("Nome2", "teste@email.com", "robin"));
+        List<User> users = _context.Users
+            .OrderBy(u => u.Id)
+            .ToList();
 
-        return users;
+        if (paginated)
+        {
+            users = _context.Users
+                .OrderBy(u => u.Id)
+                .Skip(page)
+                .Take(1)
+                .ToList();
+        }
+        IList<ListUserWithoutPasswordDto> usersList = new List<ListUserWithoutPasswordDto>();
+
+        foreach (var user in users)
+        {
+            usersList.Add(new ListUserWithoutPasswordDto(user));
+        }
+
+        return usersList;
     }
     public User FindById(int id)
     {

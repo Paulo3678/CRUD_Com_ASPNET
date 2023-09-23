@@ -22,6 +22,16 @@ public class UserController : ControllerBase
         _repository = repository;
         _passwordHasher = new PasswordHasher<User>();
     }
+    [HttpGet]
+    [Route("users")]
+    [Authorize(Roles = "ADMIN")]
+    public IActionResult ListAll([FromQuery] int page = 0)
+    {
+        var users = _repository.FindAll(true, page);
+
+        return Ok(users);
+    }
+
 
     [HttpPost]
     [Route("create")]
