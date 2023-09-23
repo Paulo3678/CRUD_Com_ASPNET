@@ -1,4 +1,4 @@
-﻿namespace Domain.Model;
+﻿namespace Domain.Model.User;
 
 public class User
 {
@@ -7,10 +7,7 @@ public class User
     public string Email { get; set; }
     public string Password { get; set; }
     public UserRolesEnum Roles { get; set; }
-    public User()
-    {
-        
-    }
+    public User(){}
     public User(string name, string email, string password, UserRolesEnum role)
     {
         Name = name;

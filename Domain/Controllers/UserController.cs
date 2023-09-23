@@ -1,5 +1,5 @@
 ﻿using Domain.Dto.User;
-using Domain.Model;
+using Domain.Model.User;
 using Domain.Repositories;
 using Domain.Services;
 using Microsoft.AspNetCore.Authentication;
@@ -115,5 +115,27 @@ public class UserController : ControllerBase
 
         }
 
+    }
+
+    [Authorize(Roles = "ADMIN")]
+    [HttpDelete("{id}")]
+    public IActionResult Delete([FromRoute] int id)
+    {
+        try
+        {
+            var tokenEmail = HttpContext.User.FindFirst("Email");
+            var user = _repository.FindByEmail(tokenEmail.Value);
+
+            if (user.Id == id)
+            {
+                return Unauthorized(new { message = "Você não pode excluir a sua conta." });
+            }
+            _repository.Delete(id);
+            return Ok(new { message = "Usuário removido com sucesso" });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 }

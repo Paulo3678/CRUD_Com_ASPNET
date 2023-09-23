@@ -1,6 +1,6 @@
 ﻿using Domain.Data;
 using Domain.Dto.User;
-using Domain.Model;
+using Domain.Model.User;
 using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Repositories;
@@ -94,4 +94,25 @@ public class UserEloquentRepository : IUserRepository
         }
     }
 
+    public void Delete(int id)
+    {
+        try
+        {
+            var user = _context.Users.FirstOrDefault(u => u.Id == id);
+            if (user == null)
+            {
+                throw new ArgumentException("Usuário não encontrado no sistema");
+            }
+            _context.Users.Remove(user);
+            _context.SaveChanges();
+        }
+        catch (ArgumentException ex)
+        {
+            throw new Exception(ex.Message);
+        }
+        catch (Exception)
+        {
+            throw new Exception("Erro ao tentar remover usuário! Tente novamente mais tarde");
+        }
+    }
 }

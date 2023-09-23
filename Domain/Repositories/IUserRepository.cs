@@ -1,5 +1,5 @@
 ﻿using Domain.Dto.User;
-using Domain.Model;
+using Domain.Model.User;
 using System.Collections;
 
 namespace Domain.Repositories;
@@ -12,4 +12,6 @@ public interface IUserRepository
     public ListUserWithoutPasswordDto Create(CreateNewUserDto dto);
     public void UpdateUserPassword(UpdatePasswordDto dto, User userToUpdate);
     public void UpdateUserInfos(UpdateUserInfoDto dto, string userEmail);
+    public void Delete(int id);
+
 }

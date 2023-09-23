@@ -1,4 +1,4 @@
-﻿using Domain.Model;
+﻿using Domain.Model.User;
 using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Dto.User;

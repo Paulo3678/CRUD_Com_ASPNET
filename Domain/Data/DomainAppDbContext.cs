@@ -1,4 +1,4 @@
-﻿using Domain.Model;
+﻿using Domain.Model.User;
 using Microsoft.EntityFrameworkCore;
 
 namespace Domain.Data;
