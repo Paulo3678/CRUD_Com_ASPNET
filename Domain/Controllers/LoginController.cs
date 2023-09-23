@@ -2,6 +2,7 @@
 using Domain.Model;
 using Domain.Repositories;
 using Domain.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Domain.Controllers;
@@ -11,9 +12,11 @@ namespace Domain.Controllers;
 public class LoginController : ControllerBase
 {
     private readonly IUserRepository _userRepository;
+    private readonly PasswordHasher<User> _passwordHasher;
     public LoginController(IUserRepository userRepository)
     {
         _userRepository = userRepository;
+        _passwordHasher = new PasswordHasher<User>();
     }
 
     [HttpPost]
@@ -23,6 +26,17 @@ public class LoginController : ControllerBase
         try
         {
             User user = _userRepository.FindByEmail(dto.Email);
+
+            var passwordIsValid = _passwordHasher.VerifyHashedPassword(user,
+                  user.Password,
+                  dto.Password
+            );
+
+            if (passwordIsValid != PasswordVerificationResult.Success)
+            {
+                return Unauthorized(new {message="A senha informada não é válida."});
+            }
+
             return Ok(new { token = jwtToken.Generate(user) });
         }
         catch (ArgumentException ex)

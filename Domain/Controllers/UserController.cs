@@ -1,7 +1,9 @@
 ﻿using Domain.Dto.User;
+using Domain.Model;
 using Domain.Repositories;
 using Domain.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -12,10 +14,11 @@ namespace Domain.Controllers;
 public class UserController : ControllerBase
 {
     private IUserRepository _repository;
-
+    private readonly PasswordHasher<User> _passwordHasher;
     public UserController(IUserRepository repository)
     {
         _repository = repository;
+        _passwordHasher = new PasswordHasher<User>();
     }
 
     [HttpPost]
@@ -58,9 +61,31 @@ public class UserController : ControllerBase
 
     [Authorize]
     [HttpPatch]
-    public IActionResult UpdatePassword()
+    public IActionResult UpdatePassword([FromBody] UpdatePasswordDto dto)
     {
-        return Ok();
+        try
+        {
+            var tokenEmail = HttpContext.User.FindFirst("Email");
+            var user = _repository.FindByEmail(tokenEmail.Value);
+
+            var passwordIsValid = _passwordHasher.VerifyHashedPassword(user,
+                  user.Password,
+                  dto.OldPassword
+            );
+
+            if (passwordIsValid != PasswordVerificationResult.Success)
+            {
+                throw new ArgumentException("A senha informada é inválida");
+            }
+
+            _repository.UpdateUserPassword(dto, user);
+
+            return Ok(new { message = "Senha atualizada com sucesso." });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 
 }

@@ -8,10 +8,11 @@ namespace Domain.Repositories;
 public class UserEloquentRepository : IUserRepository
 {
     private readonly DomainAppDbContext _context;
-
+    private readonly PasswordHasher<User> _passwordHasher;
     public UserEloquentRepository(DomainAppDbContext context)
     {
         _context = context;
+        _passwordHasher = new PasswordHasher<User>();
     }
 
     public IList<User> FindAll()
@@ -51,16 +52,29 @@ public class UserEloquentRepository : IUserRepository
             throw new ArgumentException("E-mail já cadastrado no nosso sistema.");
         }
 
-        var passwordHasher = new PasswordHasher<Program>();
-
         User user = new User(
             dto.Name,
             dto.Email,
-            passwordHasher.HashPassword(null, dto.Password)
+            _passwordHasher.HashPassword(null, dto.Password)
         );
 
         _context.Users.Add(user);
         _context.SaveChanges();
         return new ListUserWithoutPasswordDto(dto);
+    }
+
+    public void UpdateUserPassword(UpdatePasswordDto dto, User userToUpdate)
+    {
+        try
+        {
+            userToUpdate.Password = _passwordHasher.HashPassword(null, dto.NewPassword);
+            _context.Users.Update(userToUpdate);
+            _context.SaveChanges();
+        }
+        catch (Exception)
+        {
+            throw new Exception("Erro ao tentar atualizar senha. Tente novamente mais tarde");
+        }
+
     }
 }
