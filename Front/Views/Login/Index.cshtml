@@ -1,0 +1,40 @@
+﻿@model LoginViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<main id="login-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <form method="post" asp-action="Login">
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="form2Example1">Email address</label>
+                        <input type="email" name="email" asp-for="Email" class="form-control" />
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="senha">Password</label>
+                        <input type="password" name="password" asp-for="Password" id="password" class="form-control" />
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col d-flex justify-content-center">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="form2Example31" checked />
+                                <label class="form-check-label" for="form2Example31"> Remember me </label>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <a href="#!">Forgot password?</a>
+                        </div>
+                    </div>
+
+                    <button type="submit">Sign in</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</main>
