@@ -6,7 +6,19 @@ namespace Front.Controllers;
 public class LoginController : Controller
 {
 
-    public IActionResult Index() => View();
+    public IActionResult Index(IList<string> errors = null)
+    {
+        if (errors != null)
+        {
+            ViewBag.Errors = errors;
+        }
+        //var sessao = HttpContext.Session.GetString("NOME");
+        //Console.WriteLine(sessao);
+
+        return View();
+    }
+
+
     [HttpPost]
     public IActionResult Login(LoginViewModel viewModel)
     {
@@ -15,9 +27,9 @@ public class LoginController : Controller
             var errors = ModelState.Values.SelectMany(v => v.Errors)
                                      .Select(e => e.ErrorMessage)
                                      .ToList();
-            return BadRequest(errors);
+            return RedirectToAction("Index", new { errors });
         }
 
-        return Content(viewModel.Email + " | | " + viewModel.Password);
+        return RedirectToAction("Index");
     }
 }
