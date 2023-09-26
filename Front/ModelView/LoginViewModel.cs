@@ -9,4 +9,6 @@ public class LoginViewModel
     public string Email { get; set; }
     [Required(ErrorMessage = "É preciso informar a senha para continuar")]
     public string Password { get; set; }
+
+    public IList<string> ?Errors{ get; set; }
 }

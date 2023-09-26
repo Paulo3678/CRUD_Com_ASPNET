@@ -5,19 +5,15 @@ namespace Front.Controllers;
 
 public class LoginController : Controller
 {
-
     public IActionResult Index(IList<string> errors = null)
     {
+        LoginViewModel vm = new LoginViewModel();
         if (errors != null)
         {
-            ViewBag.Errors = errors;
+            vm.Errors = errors;
         }
-        //var sessao = HttpContext.Session.GetString("NOME");
-        //Console.WriteLine(sessao);
-
-        return View();
+        return View(vm);
     }
-
 
     [HttpPost]
     public IActionResult Login(LoginViewModel viewModel)
