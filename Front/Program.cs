@@ -1,3 +1,5 @@
+using Front.Services.ApiRequest;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -10,6 +12,8 @@ builder.Services.AddSession(options =>
     options.IdleTimeout = TimeSpan.FromMinutes(60);
     options.Cookie.IsEssential = true;
 });
+
+builder.Services.AddSingleton<LoginApiRequest, LoginApiRequest>();
 
 var app = builder.Build();
 
